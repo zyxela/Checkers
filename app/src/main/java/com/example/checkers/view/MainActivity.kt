@@ -1,4 +1,4 @@
-package com.example.checkers.View
+package com.example.checkers.view
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
