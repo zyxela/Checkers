@@ -2,8 +2,8 @@ package com.example.checkers.data
 
 
 data class Checker(
-    val cordX:Float,
-    val cordY: Float,
+    var cordX:Float,
+    var cordY: Float,
     val color:Int,
-    val radius: Float
+    var radius: Float
 )
