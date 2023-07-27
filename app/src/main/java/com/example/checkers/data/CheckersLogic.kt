@@ -21,8 +21,8 @@ class CheckersLogic(var checkers: MutableList<Checker>) {
     fun moveTo(checker: Checker, posX: Float, posY: Float) {
 
         if (getChecker(posX, posY) == null) {
-            if (abs(checker.cordX-posX)==260f)
-                kill(checker, posX,posY)
+            if (abs(checker.cordX - posX) >= 260f)
+                kill(checker, posX, posY)
 
             checker.cordX = posX
             checker.cordY = posY
@@ -51,20 +51,20 @@ class CheckersLogic(var checkers: MutableList<Checker>) {
         var kpX = 0f
         var kpY = 0f
 
-        if (deltaX == 260f && deltaY == -260f) {  //
-            kpX = posFX + 130f
-            kpY = posFY - 130f
+        if (deltaX > 0f && deltaY < 0f) {  //R U
+            kpX = posTX - 130f
+            kpY = posTY + 130f
 
-        } else if (deltaX == -260f && deltaY == 260f) {
-            kpX = posFX - 130f
-            kpY = posFY + 130f
+        } else if (deltaX < 0f && deltaY > 0f) {// L D
+            kpX = posTX + 130f
+            kpY = posTY - 130f
 
-        } else if (deltaX == 260f && deltaY == 260f) {
-            kpX = posFX + 130f
-            kpY = posFY + 130f
-        } else if (deltaX == -260f && deltaY == -260f) {
-            kpX = posFX - 130f
-            kpY = posFY - 130f
+        } else if (deltaX > 0f && deltaY > 0f) {// R D
+            kpX = posTX - 130f
+            kpY = posTY - 130f
+        } else if (deltaX <0f && deltaY < 0f) {// L U
+            kpX = posTX + 130f
+            kpY = posTY + 130f
         }
 
         this.checkers = delChecker(ch, kpX, kpY)
