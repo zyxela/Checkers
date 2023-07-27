@@ -27,6 +27,9 @@ class Checkerboard(context: Context, attr: AttributeSet) : View(context, attr) {
 
     lateinit var c: Checker
 
+    var nx = 0f
+    var ny = 0f
+
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event == null) return false
@@ -36,7 +39,11 @@ class Checkerboard(context: Context, attr: AttributeSet) : View(context, attr) {
             c.radius += 10
             STATEMENT *= -1
         } else {
-            CheckersLogic.moveTo(c, nearest(event.x, x_poses), nearest(event.y, y_poses))
+            nx = nearest(event.x, x_poses)
+            ny = nearest(event.y, y_poses)
+            cCheckers = CheckersLogic.kill(c.cordX, c.cordY, nx, ny, cCheckers)
+            CheckersLogic.moveTo(c, nx, ny)
+
             c.radius -= 10
             STATEMENT *= -1
         }
@@ -86,13 +93,6 @@ class Checkerboard(context: Context, attr: AttributeSet) : View(context, attr) {
         }
     }
 
-    private fun drawCheckers(canvas: Canvas?, listOfCheckers: List<Checker>) {
-        if (canvas == null) return
-        for (checker in listOfCheckers) {
-            with(checker)
-            { canvas.drawCircle(cordX, cordY, radius, paint.apply { color = checker.color }) }
-        }
-    }
 
     private fun drawPieces(checkers: List<Checker>, canvas: Canvas?) {
         checkers.forEach {
