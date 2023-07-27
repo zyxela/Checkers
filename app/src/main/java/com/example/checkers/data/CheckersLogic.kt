@@ -2,19 +2,15 @@ package com.example.checkers.data
 
 import kotlin.math.abs
 
-object CheckersLogic {
-
-    private val blackPieces = mutableListOf<Checker>()
-    private val whitePieces = mutableListOf<Checker>()
-
+class CheckersLogic(var checkers: MutableList<Checker>) {
 
     private fun delChecker(
+        walkingCh: Checker,
         posX: Float,
         posY: Float,
-        checkers: MutableList<Checker>
     ): MutableList<Checker> {
         for (i in checkers.indices) {
-            if (checkers[i].cordX == posX && checkers[i].cordY == posY) {
+            if (checkers[i].cordX == posX && checkers[i].cordY == posY && walkingCh.color != checkers[i].color) {
                 checkers.removeAt(i)
                 break
             }
@@ -23,28 +19,31 @@ object CheckersLogic {
     }
 
     fun moveTo(checker: Checker, posX: Float, posY: Float) {
-        checker.cordX = posX
-        checker.cordY = posY
+
+        if (getChecker(posX, posY) == null) {
+            if (abs(checker.cordX-posX)==260f)
+                kill(checker, posX,posY)
+
+            checker.cordX = posX
+            checker.cordY = posY
+        }
+
     }
 
-    fun stayMissis() {
-
-    }
-
-    fun getChecker(posX: Float, posY: Float, checkers: List<Checker>): Checker? {
+    fun getChecker(posX: Float, posY: Float): Checker? {
         val ch = checkers.filter {
             (abs(it.cordX - posX) < 65) && (abs(it.cordY - posY) < 65)
         }
         return if (ch.isNotEmpty()) ch[0] else null
     }
 
-    fun kill(
-        posFX: Float,
-        posFY: Float,
+    private fun kill(
+        ch: Checker,
         posTX: Float,
         posTY: Float,
-        checkers: MutableList<Checker>
-    ): MutableList<Checker> {
+    ) {
+        val posFX = ch.cordX
+        val posFY = ch.cordY
         val deltaX = posTX - posFX
         val deltaY = posTY - posFY
 
@@ -52,23 +51,23 @@ object CheckersLogic {
         var kpX = 0f
         var kpY = 0f
 
-        if (deltaX > 0 && deltaY < 0) {
+        if (deltaX == 260f && deltaY == -260f) {  //
             kpX = posFX + 130f
             kpY = posFY - 130f
 
-        } else if (deltaX < 0 && deltaY > 0) {
+        } else if (deltaX == -260f && deltaY == 260f) {
             kpX = posFX - 130f
             kpY = posFY + 130f
 
-        } else if (deltaX > 0 && deltaY > 0) {
+        } else if (deltaX == 260f && deltaY == 260f) {
             kpX = posFX + 130f
             kpY = posFY + 130f
-        } else {
+        } else if (deltaX == -260f && deltaY == -260f) {
             kpX = posFX - 130f
             kpY = posFY - 130f
         }
 
-        return delChecker(kpX, kpY, checkers)
+        this.checkers = delChecker(ch, kpX, kpY)
 
     }
 

@@ -25,26 +25,25 @@ class Checkerboard(context: Context, attr: AttributeSet) : View(context, attr) {
         initPoses()
     }
 
-    lateinit var c: Checker
+    private lateinit var selectedChecker: Checker
 
-    var nx = 0f
-    var ny = 0f
+    private var nearestX = 0f
+    private var nearestY = 0f
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event == null) return false
-
+        val cL = CheckersLogic(cCheckers)
         if (STATEMENT == 1) {
-            c = CheckersLogic.getChecker(event.x, event.y, cCheckers) ?: return false
-            c.radius += 10
+            selectedChecker = cL.getChecker(event.x, event.y) ?: return false
+            selectedChecker.radius += 10
             STATEMENT *= -1
         } else {
-            nx = nearest(event.x, x_poses)
-            ny = nearest(event.y, y_poses)
-            cCheckers = CheckersLogic.kill(c.cordX, c.cordY, nx, ny, cCheckers)
-            CheckersLogic.moveTo(c, nx, ny)
-
-            c.radius -= 10
+            nearestX = nearest(event.x, x_poses)
+            nearestY = nearest(event.y, y_poses)
+            cL.moveTo(selectedChecker, nearestX, nearestY)
+            cCheckers = cL.checkers
+            selectedChecker.radius -= 10
             STATEMENT *= -1
         }
         invalidate()
