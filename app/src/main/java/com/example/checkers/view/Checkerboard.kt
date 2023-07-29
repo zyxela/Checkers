@@ -16,7 +16,7 @@ class Checkerboard(context: Context, attr: AttributeSet) : View(context, attr) {
     private lateinit var paint: Paint
     private var cCheckers: MutableList<Checker> = mutableListOf()
     private var STATEMENT = 1
-
+    private var queue = 1 // white -- [1]  black -- [-1]
     private val x_poses = mutableListOf<Float>()
     private val y_poses = mutableListOf<Float>()
 
@@ -36,15 +36,20 @@ class Checkerboard(context: Context, attr: AttributeSet) : View(context, attr) {
         val cL = CheckersLogic(cCheckers)
         if (STATEMENT == 1) {
             selectedChecker = cL.getChecker(event.x, event.y) ?: return false
-            selectedChecker.radius += 10
-            STATEMENT *= -1
+            if (selectedChecker.queue == queue) {
+                selectedChecker.radius += 10
+                STATEMENT *= -1
+            }
         } else {
-            nearestX = nearest(event.x, x_poses)
-            nearestY = nearest(event.y, y_poses)
-            cL.moveTo(selectedChecker, nearestX, nearestY)
-            cCheckers = cL.checkers
-            selectedChecker.radius -= 10
-            STATEMENT *= -1
+            if (selectedChecker.queue == queue) {
+                nearestX = nearest(event.x, x_poses)
+                nearestY = nearest(event.y, y_poses)
+                cL.moveTo(selectedChecker, nearestX, nearestY)
+                cCheckers = cL.checkers
+                selectedChecker.radius -= 10
+                STATEMENT *= -1
+                queue *= -1
+            }
         }
         invalidate()
         return super.onTouchEvent(event)
@@ -104,7 +109,7 @@ class Checkerboard(context: Context, attr: AttributeSet) : View(context, attr) {
         var y = 85f
         for (i in 0..2) {
             for (j in 0..3) {
-                cCheckers.add(Checker(x, y, -7829368, 45f))
+                cCheckers.add(Checker(x, y, -7829368, 45f, -1))
                 x += 260
             }
             x = if (i % 2 == 0) 85f else 215f
@@ -116,7 +121,7 @@ class Checkerboard(context: Context, attr: AttributeSet) : View(context, attr) {
 
         for (i in 0..2) {
             for (j in 0..3) {
-                cCheckers.add(Checker(x, y, -1, 45f))
+                cCheckers.add(Checker(x, y, -1, 45f, 1))
                 x += 260
             }
             x = if (i % 2 == 0) 215f else 85f

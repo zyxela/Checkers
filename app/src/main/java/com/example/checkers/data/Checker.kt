@@ -5,5 +5,6 @@ data class Checker(
     var cordX:Float,
     var cordY: Float,
     val color:Int,
-    var radius: Float
+    var radius: Float,
+    var queue: Int
 )

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.example.checkers.view.Checkerboard xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_height="match_parent"
-    android:layout_width="match_parent">
+    android:id="@+id/checkersField"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
 </com.example.checkers.view.Checkerboard>
