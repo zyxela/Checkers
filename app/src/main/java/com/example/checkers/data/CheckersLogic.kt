@@ -3,6 +3,7 @@ package com.example.checkers.data
 import kotlin.math.abs
 
 class CheckersLogic(var checkers: MutableList<Checker>) {
+    val MISS_SIZE = 60f
 
     private fun delChecker(
         walkingCh: Checker,
@@ -26,6 +27,15 @@ class CheckersLogic(var checkers: MutableList<Checker>) {
 
             checker.cordX = posX
             checker.cordY = posY
+
+            if (checker.cordY == 85f && checker.color == -1){
+                if (checker.radius != MISS_SIZE)
+                    checker.radius = MISS_SIZE
+            }
+           else if (checker.cordY == 545f && checker.color != -1){
+                if (checker.radius != MISS_SIZE)
+                    checker.radius = MISS_SIZE
+            }
         }
 
     }
