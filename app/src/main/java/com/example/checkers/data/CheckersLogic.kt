@@ -5,6 +5,19 @@ import kotlin.math.abs
 class CheckersLogic(var checkers: MutableList<Checker>) {
     val MISS_SIZE = 60f
 
+    var countOfWhite = 0
+    var countOfBlack = 0
+
+
+    fun setCountOfPieces(countOfBlack:Int, countOfWhite: Int){
+        this.countOfBlack = countOfBlack
+        this.countOfWhite = countOfWhite
+    }
+    fun gameOverAlert():Int{
+        if (countOfBlack == 0 || countOfWhite == 0)
+            return 0
+        return 1
+    }
     private fun delChecker(
         walkingCh: Checker,
         posX: Float,
@@ -12,6 +25,11 @@ class CheckersLogic(var checkers: MutableList<Checker>) {
     ): MutableList<Checker> {
         for (i in checkers.indices) {
             if (checkers[i].cordX == posX && checkers[i].cordY == posY && walkingCh.color != checkers[i].color) {
+                if (checkers[i].color == -1)
+                    --countOfWhite
+                else
+                    --countOfBlack
+
                 checkers.removeAt(i)
                 break
             }
@@ -28,11 +46,10 @@ class CheckersLogic(var checkers: MutableList<Checker>) {
             checker.cordX = posX
             checker.cordY = posY
 
-            if (checker.cordY == 85f && checker.color == -1){
+            if (checker.cordY == 85f && checker.color == -1) {
                 if (checker.radius != MISS_SIZE)
                     checker.radius = MISS_SIZE
-            }
-           else if (checker.cordY == 545f && checker.color != -1){
+            } else if (checker.cordY == 545f && checker.color != -1) {
                 if (checker.radius != MISS_SIZE)
                     checker.radius = MISS_SIZE
             }
@@ -72,7 +89,7 @@ class CheckersLogic(var checkers: MutableList<Checker>) {
         } else if (deltaX > 0f && deltaY > 0f) {// R D
             kpX = posTX - 130f
             kpY = posTY - 130f
-        } else if (deltaX <0f && deltaY < 0f) {// L U
+        } else if (deltaX < 0f && deltaY < 0f) {// L U
             kpX = posTX + 130f
             kpY = posTY + 130f
         }

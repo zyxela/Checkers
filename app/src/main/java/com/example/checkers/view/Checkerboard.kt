@@ -6,11 +6,13 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
+import android.util.Log
 import android.view.MotionEvent
 import android.view.View
 import com.example.checkers.data.Checker
 import com.example.checkers.data.CheckersLogic
 import kotlin.math.abs
+import kotlin.properties.Delegates
 
 class Checkerboard(context: Context, attr: AttributeSet) : View(context, attr) {
     private lateinit var paint: Paint
@@ -19,6 +21,15 @@ class Checkerboard(context: Context, attr: AttributeSet) : View(context, attr) {
     private var queue = 1 // white -- [1]  black -- [-1]
     private val x_poses = mutableListOf<Float>()
     private val y_poses = mutableListOf<Float>()
+    private val cL = CheckersLogic(cCheckers)
+
+    private var countOfWhite = 12
+    private var countOfBlack = 12
+
+    private var gameOver: Int by Delegates.observable(1) { _, oldValue, newValue ->
+        if (oldValue != newValue)
+            Log.i("GameOver", "END|$oldValue|$newValue|$countOfWhite")
+    }
 
     init {
         startPosForCh()
@@ -33,7 +44,6 @@ class Checkerboard(context: Context, attr: AttributeSet) : View(context, attr) {
     @SuppressLint("ClickableViewAccessibility")
     override fun onTouchEvent(event: MotionEvent?): Boolean {
         if (event == null) return false
-        val cL = CheckersLogic(cCheckers)
         if (STATEMENT == 1) {
             selectedChecker = cL.getChecker(event.x, event.y) ?: return false
             if (selectedChecker.queue == queue) {
@@ -42,13 +52,22 @@ class Checkerboard(context: Context, attr: AttributeSet) : View(context, attr) {
             }
         } else {
             if (selectedChecker.queue == queue) {
+
                 nearestX = nearest(event.x, x_poses)
                 nearestY = nearest(event.y, y_poses)
+                cL.setCountOfPieces(countOfBlack, countOfWhite)
                 cL.moveTo(selectedChecker, nearestX, nearestY)
+                countOfBlack = cL.countOfBlack
+                countOfWhite = cL.countOfWhite
+                gameOver = cL.gameOverAlert()
+
                 cCheckers = cL.checkers
+
                 selectedChecker.radius -= 10
                 STATEMENT *= -1
                 queue *= -1
+
+
             }
         }
         invalidate()
