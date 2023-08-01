@@ -55,17 +55,20 @@ class Checkerboard(context: Context, attr: AttributeSet) : View(context, attr) {
 
                 nearestX = nearest(event.x, x_poses)
                 nearestY = nearest(event.y, y_poses)
+                cL.queue = queue
                 cL.setCountOfPieces(countOfBlack, countOfWhite)
                 cL.moveTo(selectedChecker, nearestX, nearestY)
+
+
                 countOfBlack = cL.countOfBlack
                 countOfWhite = cL.countOfWhite
                 gameOver = cL.gameOverAlert()
 
                 cCheckers = cL.checkers
+                STATEMENT *= -1
+                queue = cL.queue
 
                 selectedChecker.radius -= 10
-                STATEMENT *= -1
-                queue *= -1
 
 
             }

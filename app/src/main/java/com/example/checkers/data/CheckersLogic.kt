@@ -3,21 +3,24 @@ package com.example.checkers.data
 import kotlin.math.abs
 
 class CheckersLogic(var checkers: MutableList<Checker>) {
-    val MISS_SIZE = 60f
+    private val MISS_SIZE = 60f
 
     var countOfWhite = 0
     var countOfBlack = 0
 
+    var queue = 1
 
-    fun setCountOfPieces(countOfBlack:Int, countOfWhite: Int){
+    fun setCountOfPieces(countOfBlack: Int, countOfWhite: Int) {
         this.countOfBlack = countOfBlack
         this.countOfWhite = countOfWhite
     }
-    fun gameOverAlert():Int{
+
+    fun gameOverAlert(): Int {
         if (countOfBlack == 0 || countOfWhite == 0)
             return 0
         return 1
     }
+
     private fun delChecker(
         walkingCh: Checker,
         posX: Float,
@@ -43,6 +46,8 @@ class CheckersLogic(var checkers: MutableList<Checker>) {
             if (abs(checker.cordX - posX) >= 260f)
                 kill(checker, posX, posY)
 
+            if (checker.cordX != posX && checker.cordY != posY)
+                queue *= -1
             checker.cordX = posX
             checker.cordY = posY
 
@@ -97,5 +102,4 @@ class CheckersLogic(var checkers: MutableList<Checker>) {
         this.checkers = delChecker(ch, kpX, kpY)
 
     }
-
 }
