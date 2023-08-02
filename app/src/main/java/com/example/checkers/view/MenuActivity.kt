@@ -7,7 +7,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.checkers.R
 
 
-class MenuActivity:AppCompatActivity() {
+class MenuActivity : AppCompatActivity() {
 
     private lateinit var play: Button
     private lateinit var playOnline: Button
@@ -22,6 +22,10 @@ class MenuActivity:AppCompatActivity() {
 
         play.setOnClickListener {
             startActivity(Intent(this, PlaygroundActivity::class.java))
+        }
+
+        playOnline.setOnClickListener {
+            startActivity(Intent(this, SelectDevicesActivity::class.java))
         }
     }
 }
