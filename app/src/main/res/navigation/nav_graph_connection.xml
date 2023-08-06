@@ -7,5 +7,17 @@
     <fragment
         android:id="@+id/beServer"
         android:name="com.example.checkers.view.fragments.BeServer"
-        android:label="BeServer" />
+        android:label="BeServer" >
+        <action
+            android:id="@+id/action_beServer_to_beClient"
+            app:destination="@id/beClient" />
+    </fragment>
+    <fragment
+        android:id="@+id/beClient"
+        android:name="com.example.checkers.view.fragments.BeClient"
+        android:label="BeClient" >
+        <action
+            android:id="@+id/action_beClient_to_beServer"
+            app:destination="@id/beServer" />
+    </fragment>
 </navigation>
